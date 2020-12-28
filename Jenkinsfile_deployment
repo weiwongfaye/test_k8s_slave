@@ -25,7 +25,7 @@ pipeline {
         stage('Test Deployment') {
     	    steps {
     		      sh 'sleep 20000'
-                  sh 'sh 'curl http://192.168.99.100:31685/''
+                  sh 'sh 'curl http://192.168.99.100:31685/'
     	    }	 			
     	}
     }
