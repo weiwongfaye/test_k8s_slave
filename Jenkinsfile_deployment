@@ -1,0 +1,17 @@
+pipeline {
+    agent {label 'kubepod'}
+    stages {
+        stage('CLONE') {
+            steps {
+                git branch: 'main', url: 'https://github.com/weiwongfaye/test_k8s_slave.git'
+            }
+        }
+	stage('Deploy App') {
+	    steps {
+		kubernetesDeploy(configs: "nginx-deployment.yaml", kubeconfigId: "mykubeconfig")		
+	    }	 			
+		
+	}
+      }
+    }
+}
