@@ -6,7 +6,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/weiwongfaye/test_k8s_slave.git'
             }
         }
-        stage('TEST') {
+        stage('Unit TEST') {
             steps {
                 sh 'py.test . --junitxml=test_report.xml'
             }
@@ -18,7 +18,14 @@ pipeline {
         }
     	stage('Deploy App') {
     	    steps {
-    		      kubernetesDeploy(configs: "nginx-deployment.yaml", kubeconfigId: "mykubeconfig")		
+    		      kubernetesDeploy(configs: "nginx-deployment.yaml", kubeconfigId: "mykubeconfig")
+                  kubernetesDeploy(configs: "nginx-service-lb.yaml", kubeconfigId: "mykubeconfig")		
+    	    }	 			
+    	}
+        stage('Test Deployment') {
+    	    steps {
+    		      sh 'sleep 20000'
+                  sh 'sh 'curl http://192.168.99.100:31685/''
     	    }	 			
     	}
     }
