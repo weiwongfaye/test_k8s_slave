@@ -6,12 +6,21 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/weiwongfaye/test_k8s_slave.git'
             }
         }
-	stage('Deploy App') {
-	    steps {
-		kubernetesDeploy(configs: "nginx-deployment.yaml", kubeconfigId: "mykubeconfig")		
-	    }	 			
-		
-	}
-      }
+        stage('TEST') {
+            steps {
+                sh 'py.test . --junitxml=test_report.xml'
+            }
+        }
+        stage('PUBLISH REPORT') {
+            steps {
+                junit 'test_report.xml'
+            }
+        }
+    	stage('Deploy App') {
+    	    steps {
+    		      kubernetesDeploy(configs: "nginx-deployment.yaml", kubeconfigId: "mykubeconfig")		
+    	    }	 			
+    	}
     }
 }
+
