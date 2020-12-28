@@ -24,18 +24,16 @@ pipeline {
     	}
         stage('Test Deployment') {
     	    steps {
-    		      sh 'sleep 20'
+    		      sh 'sleep 60'
                   sh 'curl http://192.168.99.100:31685/'
     	    }	 			
     	}
-        stage('Clean Up Deployment') {
-    	    steps {
-    		     steps {
-    		      kubernetesDeploy(configs: "nginx-deployment.yaml", deleteResource: true, kubeconfigId: "mykubeconfig")
-                  kubernetesDeploy(configs: "nginx-service-lb.yaml", deleteResource: true, kubeconfigId: "mykubeconfig")		
-    	    }	 
-    	    }	 			
-    	}
+    }
+    post { 
+        always { 
+            kubernetesDeploy(configs: "nginx-deployment.yaml", deleteResource: true, kubeconfigId: "mykubeconfig")
+            kubernetesDeploy(configs: "nginx-service-lb.yaml", deleteResource: true, kubeconfigId: "mykubeconfig")
+        }
     }
 }
 
